@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 type MatchType = {
   idMatch: number;
@@ -32,6 +33,7 @@ const Matches: React.FC = () => {
   const { id } = router.query;
   const [isCreator, setIsCreator] = useState(false);
   const [inputScores, setInputScores] = useState<{ [key: number]: { competitor1Score: string, competitor2Score: string } }>({});
+  const { user, error, isLoading } = useUser();
 
   const fetchData = async () => {
     const responseMatches = await fetch(`/api/matches?id=${id}`);
@@ -50,11 +52,12 @@ const Matches: React.FC = () => {
       fetchData();
       fetch(`/api/getCompetition?id=${id}`)
         .then((response) => response.json())
-        .then((data) => {
+        .then(async (data) => {
           setIsCreator(data.isCreator);
         });
     }
-  }, [id]);
+  }, [id, user, isLoading]);
+  
 
   const handleScoreChange = (matchId: number, competitor: 'competitor1' | 'competitor2', score: string) => {
     setInputScores(prev => ({
@@ -94,6 +97,13 @@ const Matches: React.FC = () => {
   };
 
   if (loading) return <div className="text-center mt-10 text-xl">Loading...</div>;
+  if (!isCreator) {
+    return (
+      <div className="text-center text-xl">
+        Unauthorized: You don&apos;t have permission to view this page.
+      </div>
+    );
+  }
   const rounds: { [key: number]: MatchType[] } = {};
   matches.forEach((match) => {
     if (!rounds[match.roundNumber]) {

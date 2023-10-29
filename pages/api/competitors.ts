@@ -1,5 +1,3 @@
-// pages/api/competitors.ts
-
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
 
@@ -30,6 +28,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.status(500).json({ error: 'Failed to fetch competitors' });
     }
   } else {
-    res.status(405).end(); // Method Not Allowed
+    res.status(405).end();
   }
 };

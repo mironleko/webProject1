@@ -12,7 +12,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({ onSubmit }) => {
     e.preventDefault();
 
     try {
-      // Make a POST request to your API route for user creation
       const response = await fetch("/api/createUser", {
         method: "POST",
         headers: {
@@ -23,8 +22,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({ onSubmit }) => {
 
       if (response.ok) {
         const user = await response.json();
-        onSubmit(user.name, user.email); // Optional: Pass the user data back to the parent component
-        // Optionally, you can clear the input fields here:
+        onSubmit(user.name, user.email); 
         setName("");
         setEmail("");
       } else {

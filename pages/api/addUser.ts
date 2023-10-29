@@ -1,5 +1,3 @@
-// pages/api/addUser.ts
-
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
 
@@ -18,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const existingUser = await prisma.user.findUnique({
     where: {
-      auth0Id: user.sub, // Assuming `sub` is the unique Auth0 user ID
+      auth0Id: user.sub,
     },
   });
 
@@ -28,7 +26,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         auth0Id: user.sub,
         email: user.email,
         name: user.name,
-        // ... any other fields you want to save
       },
     });
   }

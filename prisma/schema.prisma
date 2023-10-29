@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   id       Int          @id @default(autoincrement())
-  auth0Id  String       @unique  // This will store the unique ID from Auth0 for each user
+  auth0Id  String       @unique 
   email    String       @unique
   name     String?
   competitions Competition[]
@@ -56,9 +56,9 @@ model Match {
   competitor2Id   Int
   competitor1     Competitor   @relation(name: "MatchToCompetitor1", fields: [competitor1Id], references: [idCompetitor])
   competitor2     Competitor   @relation(name: "MatchToCompetitor2", fields: [competitor2Id], references: [idCompetitor])
-  competitor1Score Int?        // Nullable since the match might not have been played yet
-  competitor2Score Int?        // Nullable
-  matchDate       DateTime?    // Nullable
+  competitor1Score Int?        
+  competitor2Score Int?        
+  matchDate       DateTime?    
   isPlayed        Boolean      @default(false)
   competition     Competition  @relation(fields: [idCompetition], references: [idCompetition])
 }

@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int          @id @default(autoincrement())
+  auth0Id  String       @unique  // This will store the unique ID from Auth0 for each user
+  email    String       @unique
+  name     String?
+  competitions Competition[]
+}
+
+model Competition {
+  idCompetition   Int       @id @default(autoincrement())
+  competitionName String
+  idSystemScoring Int
+  systemScoring   SystemScoring @relation(fields: [idSystemScoring], references: [idSystemScoring])
+  creatorId       Int
+  creator         User @relation(fields: [creatorId], references: [id])
+  competitors     Competitor[]
+  matches         Match[]
+}
+
+
+model SystemScoring {
+  idSystemScoring Int       @id @default(autoincrement())
+  win_points      Int
+  draw_points     Int
+  lose_points     Int
+  competitions    Competition[]
+}
+
+model Competitor {
+  idCompetitor    Int          @id @default(autoincrement())
+  competitorName  String
+  points          Int          @default(0)
+  idCompetition   Int
+  competition     Competition  @relation(fields: [idCompetition], references: [idCompetition])
+  matches1        Match[]      @relation("MatchToCompetitor1")
+  matches2        Match[]      @relation("MatchToCompetitor2")
+}
+
+model Match {
+  idMatch         Int          @id @default(autoincrement())
+  idCompetition   Int
+  roundNumber     Int
+  competitor1Id   Int
+  competitor2Id   Int
+  competitor1     Competitor   @relation(name: "MatchToCompetitor1", fields: [competitor1Id], references: [idCompetitor])
+  competitor2     Competitor   @relation(name: "MatchToCompetitor2", fields: [competitor2Id], references: [idCompetitor])
+  competitor1Score Int?        // Nullable since the match might not have been played yet
+  competitor2Score Int?        // Nullable
+  matchDate       DateTime?    // Nullable
+  isPlayed        Boolean      @default(false)
+  competition     Competition  @relation(fields: [idCompetition], references: [idCompetition])
+}
+
+
+
+
+

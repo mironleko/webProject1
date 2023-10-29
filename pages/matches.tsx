@@ -16,7 +16,14 @@ type CompetitorType = {
   competitorName: string;
   points: number;
 };
-
+const copyToClipboard = (text: string) => {
+  const textarea = document.createElement('textarea');
+  textarea.textContent = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+};
 const Matches: React.FC = () => {
   const [matches, setMatches] = useState<MatchType[]>([]);
   const [competitors, setCompetitors] = useState<CompetitorType[]>([]);
@@ -58,7 +65,11 @@ const Matches: React.FC = () => {
       }
     }));
   };
-
+  const handleGenerateLink = () => {
+    const link = `${window.location.origin}/ViewOnlyMatches?id=${id}`;
+    copyToClipboard(link);
+    alert('View-only link copied to clipboard!');
+  };
   const handleMatchUpdate = async (matchId: number) => {
     const scores = inputScores[matchId];
     if (!scores) return;
@@ -125,6 +136,14 @@ const Matches: React.FC = () => {
           </ul>
         </div>
       ))}
+      <div className="mt-4">
+        <button
+          onClick={handleGenerateLink}
+          className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Generate View-Only Link
+        </button>
+      </div>
       <h2 className="text-xl font-bold mb-4 text-center">Current Table</h2>
       <table className="w-full border-collapse border border-gray-300">
         <thead>

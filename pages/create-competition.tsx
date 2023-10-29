@@ -14,7 +14,10 @@ const CreateCompetition: React.FC = () => {
     e.preventDefault();
   
     const competitorsArray = competitors.split(/,|\n/).map(c => c.trim()).filter(Boolean);
-
+    if (competitorsArray.length < 4 || competitorsArray.length > 8) {
+      alert('Broj natjecatelja mora biti između 4 i 8.');
+      return; // Exit the function
+    }
     const response = await fetch('/api/createCompetition', {
       method: 'POST',
       headers: {

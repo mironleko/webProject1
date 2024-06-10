@@ -45,9 +45,9 @@
         return;
       }
 
-      const competitorsArray = competitors.split(/,|\n/).map(c => c.trim()).filter(Boolean);
+      const competitorsArray = competitors.split(/;|\n/).map(c => c.trim()).filter(Boolean);
       if (!areCompetitorsValid(competitorsArray)) {
-        setCompetitorsError('Invalid competitors format or number. Ensure names are separated by commas or new lines and you have between 4 to 8 competitors.');
+    setCompetitorsError('Invalid competitors format or number. Ensure names are separated by semicolons or new lines and you have between 4 to 8 competitors.');
         return;
       }
 
@@ -90,7 +90,7 @@
     {nameError && <p className="text-red-500 text-sm mt-2">{nameError}</p>}
   </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Natjecatelji (odvojeni zarezom ili novim redom):</label>
+            <label className="block text-sm font-medium mb-2">Natjecatelji (odvojeni točka-zarezom ili novim redom):</label>
               <textarea
                 rows={5}
                 value={competitors}
